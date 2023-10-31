@@ -60,12 +60,15 @@ class tiempo:
 
 
 class paciente:
-    def __init__(self, nombre: str, apellido: str, dni: str, prioridad: Color, sintomas: Esintomas):
-        self.prioridad = prioridad
+    def __init__(self, nombre: str, apellido: str, dni: str, sintomas: Esintomas):
         self.sintomas = sintomas
         self.nombre = nombre
         self.apellido = apellido
         self.dni = dni
+        self.prioridad = Color.AZUL
+
+    def set_prioridad(self, prioridad: Color):
+        self.prioridad = prioridad
 
 
 class medico:
@@ -123,6 +126,7 @@ class enfermero:
         #        return Color.ROJO
         #elif(aciente.consciente == False)
 
+    def cola(self,cola,paciente:paciente):
 
 
 
