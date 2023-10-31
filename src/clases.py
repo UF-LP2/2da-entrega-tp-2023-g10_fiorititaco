@@ -66,20 +66,52 @@ class paciente:
         self.apellido = apellido
         self.dni = dni
         self.prioridad = Color.AZUL
+        self.tiempo_espera = 0
+
+    def paso_tiempo(self):
+        if self.tiempo_espera == 0:
+            return
+        self.tiempo_espera -= 5
+        if self.tiempo_espera == 0:
+            self.set_prioridad(Color.ROJO)
+        elif self.tiempo_espera == 10:
+            self.set_prioridad(Color.NARANJA)
+        elif self.tiempo_espera == 60:
+            self.set_prioridad(Color.AMARILLO)
+        elif self.tiempo_espera == 120:
+            self.set_prioridad(Color.VERDE)
 
     def set_prioridad(self, prioridad: Color):
         self.prioridad = prioridad
+        if prioridad == Color.NARANJA:
+            self.tiempo_espera = 10
+        elif prioridad == Color.AMARILLO:
+            self.tiempo_espera = 60
+        elif prioridad == Color.VERDE:
+            self.tiempo_espera = 120
+        elif prioridad == Color.AZUL:
+            self.tiempo_espera = 240
+
+
 
 
 class medico:
     cantidad = 1
 
-    def __init__(self, ocupado: bool, tiempo_atencion: int):
+    def __init__(self, ocupado: bool):
         self.ocupado = False
         self.tiempo_atencion = 0
 
+
+
     def set_ocupado(self):
         self.ocupado = not(self.ocupado)
+
+    def atender(self, Paciente: paciente):
+        if self.ocupado:
+            return
+        self.set_tiempo(Paciente.prioridad)
+        self.set_ocupado()
 
     def set_tiempo(self, urgencia: Color):
         tiempo = 0

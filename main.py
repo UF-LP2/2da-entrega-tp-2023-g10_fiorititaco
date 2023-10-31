@@ -7,17 +7,16 @@ from src.clases import Esintomas
 from src.clases import paciente
 
 
-def triageDyV(vector:list[paciente]):
-
-  if len(vector)>0:
-    return mayor(vector,1,len(vector))
+def triageDyV(vector: list[paciente]):
+  if len(vector) > 0:
+    return mayor(vector, 1, len(vector))
   else:
     raise ValueError
 
-def mayor(vector:list[paciente],inicio:int,fin:int) -> paciente:
-  if(len(vector) == 1)
-    aux = vector[0]
-    return aux
+
+def mayor(vector: list[paciente], inicio: int, fin: int) -> paciente:
+  if len(vector) == 1:
+    return vector[0]
   elif (fin-inicio) == 1:
     if vector[0].prioridad < vector[1].prioridad:
       return vector[0]
@@ -25,8 +24,6 @@ def mayor(vector:list[paciente],inicio:int,fin:int) -> paciente:
       return vector[1]
     else:
       return vector[0]
-
-
 
   mitad: int = int(((fin - inicio) / 2) + inicio)
   aux1: paciente = mayor(vector, inicio, mitad)
@@ -40,8 +37,6 @@ def mayor(vector:list[paciente],inicio:int,fin:int) -> paciente:
     return aux1
 
 
-
-
 def main() -> None:
   Cola = []
   with open("src/pacientes.csv") as file:
@@ -49,9 +44,12 @@ def main() -> None:
     next(file, None)
 
     for line in reader:
-      paciente = paciente(line[1], line[2], line[3], line[0])
-      paciente.set_prioridad(enfermero.triage(paciente))
-      Cola.insert(0,paciente)
+      Paciente = paciente(line[1], line[2], line[3], Esintomas(line[0]))
+      Paciente.set_prioridad(enfermero.triage(Paciente))
+      Cola.append(Paciente)
+      aux = triageDyV(Cola)
+      Cola.remove(aux)
+
 
 
 
