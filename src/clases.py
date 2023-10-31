@@ -24,6 +24,8 @@ class Esintomas(Enum):
     Dolor_inespecifico_leve = 13
     Traumatismo = 14
     Esguince = 15
+    #azul
+    otro = 16
 
 
 class Color(Enum):
@@ -58,9 +60,12 @@ class tiempo:
 
 
 class paciente:
-    def __init__(self, prioridad: Color, sintomas: Esintomas):
+    def __init__(self, nombre: str, apellido: str, dni: str, prioridad: Color, sintomas: Esintomas):
         self.prioridad = prioridad
         self.sintomas = sintomas
+        self.nombre = nombre
+        self.apellido = apellido
+        self.dni = dni
 
 
 class medico:
