@@ -36,30 +36,7 @@ class Color(Enum):
     AZUL = 4
 
 
-class tiempo:
-    minutos = 0
-    horas = 0
-
-    def avanzar(self):
-        tiempo.minutos += 5
-        if tiempo.minutos == 60:
-            tiempo.minutos = 0
-            tiempo.horas += 1
-        if tiempo.horas == 24:
-            tiempo.horas = 0
-        if tiempo.horas == 23:
-            medico.cantidad = 1
-        elif tiempo.horas == 6:
-            medico.cantidad = 2
-        elif tiempo.horas == 10:
-            medico.cantidad = 5
-        elif tiempo.horas == 16:
-            medico.cantidad = 3
-
-#vivo:bool, respirando:bool, consciente:bool
-
-
-class paciente:
+class Paciente:
     def __init__(self, nombre: str, apellido: str, dni: str, sintomas: Esintomas):
         self.sintomas = sintomas
         self.nombre = nombre
@@ -93,25 +70,30 @@ class paciente:
             self.tiempo_espera = 240
 
 
-
-
-class medico:
+class Medico:
     cantidad = 1
 
-    def __init__(self, ocupado: bool):
+    def __init__(self, nombre: str, apellido: str):
+        self.nombre = nombre
+        self.apellido = apellido
         self.ocupado = False
         self.tiempo_atencion = 0
-
-
 
     def set_ocupado(self):
         self.ocupado = not(self.ocupado)
 
-    def atender(self, Paciente: paciente):
+    def atender(self, paciente: Paciente) -> bool:
         if self.ocupado:
-            return
-        self.set_tiempo(Paciente.prioridad)
+            return True
+        self.set_tiempo(paciente.prioridad)
         self.set_ocupado()
+        return False
+
+    def paso_tiempo(self):
+        if self.ocupado:
+            self.tiempo_atencion -= 5
+            if self.tiempo_atencion == 0:
+                self.set_ocupado()
 
     def set_tiempo(self, urgencia: Color):
         tiempo = 0
@@ -133,32 +115,56 @@ class medico:
         self.tiempo_atencion = tiempo
 
 
-class enfermero:
+class Enfermero:
 
-    def triage(self, Paciente:paciente) -> Color:
-        if Paciente.sintomas == 0:
+    def triage(self, paciente: Paciente) -> Color:
+        if paciente.sintomas == 0:
             return Color.ROJO
-        elif (Paciente.sintomas == Esintomas.Coma or Paciente.sintomas == Esintomas.Convulsion or
-              Paciente.sintomas == Esintomas.hemorragia_digestiva or Paciente.sintomas == Esintomas.Isquemia):
+        elif (paciente.sintomas == Esintomas.Coma or paciente.sintomas == Esintomas.Convulsion or
+              paciente.sintomas == Esintomas.hemorragia_digestiva or paciente.sintomas == Esintomas.Isquemia):
             return Color.NARANJA
-        elif (Paciente.sintomas == Esintomas.Cefalea_brusca or Paciente.sintomas == Esintomas.Paresia or
-              Paciente.sintomas == Esintomas.Hipertension_arterial or
-              Paciente.sintomas == Esintomas.Vertigo_con_afectacion_vegetativa or
-              Paciente.sintomas == Esintomas.Sincope or Paciente.sintomas == Esintomas.Urgencia_psiquiatrica):
-            return Color.AMARILLO
-        elif (Paciente.sintomas == Esintomas.Otalgia or Paciente.sintomas == Esintomas.Odontalgia or
-              Paciente.sintomas == Esintomas.Dolor_inespecifico_leve or Paciente.sintomas == Esintomas.Traumatismo or
-                Paciente.sintomas == Esintomas.Esguince):
+        elif paciente.sintomas == Esintomas.otro:
+            return Color.AZUL
+        elif (paciente.sintomas == Esintomas.Otalgia or paciente.sintomas == Esintomas.Odontalgia or
+              paciente.sintomas == Esintomas.Dolor_inespecifico_leve or paciente.sintomas == Esintomas.Traumatismo or
+                paciente.sintomas == Esintomas.Esguince):
             return Color.VERDE
-        return Color.AZUL
+        return Color.AMARILLO
 
-        #if(Paciente.vivo == False)
-        #    raise ValueError
-        #elif(Paciente.respirando == False or Paciente.consciente == False)
-        #        return Color.ROJO
-        #elif(aciente.consciente == False)
 
-    def cola(self,cola,paciente:paciente):
+class Tiempo:
+    minutos = 0
+    horas = 0
+
+    def avanzar(self, cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Medico, medico4: Medico, medico5: Medico):
+        Tiempo.minutos += 5
+        if Tiempo.minutos == 60:
+            Tiempo.minutos = 0
+            Tiempo.horas += 1
+        if Tiempo.horas == 24:
+            Tiempo.horas = 0
+        if Tiempo.horas == 23:
+            Medico.cantidad = 1
+        elif Tiempo.horas == 6:
+            Medico.cantidad = 2
+        elif Tiempo.horas == 10:
+            Medico.cantidad = 5
+        elif Tiempo.horas == 16:
+            Medico.cantidad = 3
+
+        i = 0
+        while len(cola):
+            cola[i].paso_tiempo()
+            i += 1
+
+        medico1.paso_tiempo()
+        medico2.paso_tiempo()
+        medico3.paso_tiempo()
+        medico4.paso_tiempo()
+        medico5.paso_tiempo()
+
+
+
 
 
 
