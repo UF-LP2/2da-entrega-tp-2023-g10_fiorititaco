@@ -37,7 +37,7 @@ class Color(Enum):
 
 
 class Paciente:
-    def __init__(self, nombre: str, apellido: str, dni: str, sintomas: Esintomas):
+    def __init__(self, nombre: str, apellido: str, dni: str, sintomas: int):
         self.sintomas = sintomas
         self.nombre = nombre
         self.apellido = apellido
@@ -136,7 +136,7 @@ class Tiempo:
     minutos = 0
     horas = 0
 
-    def avanzar(self, cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Medico, medico4: Medico, medico5: Medico):
+    def avanzar(self, cola: list[Paciente], medico1, medico2, medico3, medico4, medico5):
         Tiempo.minutos += 5
         if Tiempo.minutos == 60:
             Tiempo.minutos = 0

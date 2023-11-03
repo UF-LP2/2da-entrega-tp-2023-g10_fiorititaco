@@ -2,8 +2,6 @@ import csv
 from src.clases import Tiempo
 from src.clases import Enfermero
 from src.clases import Medico
-#from src.clases import Color
-from src.clases import Esintomas
 from src.clases import Paciente
 
 
@@ -36,7 +34,9 @@ def mayor(vector: list[Paciente], inicio: int, fin: int) -> Paciente:
 
 
 def main() -> None:
+    tiempo = Tiempo()
     Cola = []
+    enfermero = Enfermero()
     medico1 = Medico("Gandalf", "El Blanco")
     medico2 = Medico("Albus", "Dumbledor")
     medico3 = Medico("Qui-Gon", "Jinn")
@@ -49,8 +49,8 @@ def main() -> None:
 
         for line in reader:
 
-            paciente = Paciente(line[1], line[2], line[3], Esintomas(line[0]))
-            paciente.set_prioridad(Enfermero.triage(paciente))
+            paciente = Paciente(line[1], line[2], line[3], int(line[0]))
+            paciente.set_prioridad(enfermero.triage(paciente))
             Cola.append(paciente)
             aux = triageDyV(Cola)
             Cola.remove(aux)
@@ -65,7 +65,7 @@ def main() -> None:
             if Medico.cantidad > 4 and rebote:
                 rebote = medico5.atender(aux)
 
-            Tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
+            tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
 
 
 if __name__ == "__main__":
