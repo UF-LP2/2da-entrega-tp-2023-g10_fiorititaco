@@ -38,7 +38,7 @@ class Color(Enum):
 
 class Paciente:
     def __init__(self, nombre: str, apellido: str, dni: str, sintomas: int):
-        self.sintomas = sintomas
+        self.sintomas = Esintomas(sintomas)
         self.nombre = nombre
         self.apellido = apellido
         self.dni = dni
@@ -118,7 +118,8 @@ class Medico:
 class Enfermero:
 
     def triage(self, paciente: Paciente) -> Color:
-        if paciente.sintomas == 0:
+        aux = Esintomas(paciente.sintomas)
+        if paciente.sintomas == Esintomas.Politraumatismo_grave:
             return Color.ROJO
         elif (paciente.sintomas == Esintomas.Coma or paciente.sintomas == Esintomas.Convulsion or
               paciente.sintomas == Esintomas.hemorragia_digestiva or paciente.sintomas == Esintomas.Isquemia):
