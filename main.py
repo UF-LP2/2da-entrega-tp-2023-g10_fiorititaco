@@ -1,8 +1,10 @@
 import csv
+import tkinter as tk
 from src.clases import Tiempo
 from src.clases import Enfermero
 from src.clases import Medico
 from src.clases import Paciente
+from src.clases import Color
 
 
 def triageDyV(vector: list[Paciente]):
@@ -11,24 +13,34 @@ def triageDyV(vector: list[Paciente]):
     else:
         raise ValueError
 
-
+def numcolor(color:Color):
+    if color == color.ROJO:
+        return 0
+    elif color == color.NARANJA:
+        return 1
+    elif color == color.AMARILLO:
+        return 2
+    elif color == color.VERDE:
+        return 3
+    else:
+        return 4
 def mayor(vector: list[Paciente], inicio: int, fin: int) -> Paciente:
-    if len(vector) == 1:
-        return vector[0]
+    if fin - inicio == 0:
+        return vector[inicio - 1]
     elif (fin-inicio) == 1:
-        if vector[0].prioridad < vector[1].prioridad:
-            return vector[0]
-        elif vector[0].prioridad > vector[1].prioridad:
-            return vector[1]
-        return vector[0]
+        if numcolor(vector[inicio - 1].prioridad) < numcolor(vector[fin - 1].prioridad):
+            return vector[inicio - 1]
+        elif numcolor(vector[inicio - 1].prioridad) > numcolor(vector[fin - 1].prioridad):
+            return vector[fin - 1]
+        return vector[inicio - 1]
 
     mitad: int = int(((fin - inicio) / 2) + inicio)
     aux1: Paciente = mayor(vector, inicio, mitad)
     aux2: Paciente = mayor(vector, mitad + 1, fin)
 
-    if aux1.prioridad < aux2.prioridad:
+    if numcolor(aux1.prioridad) < numcolor(aux2.prioridad):
         return aux1
-    elif aux1.prioridad > aux2.prioridad:
+    elif numcolor(aux1.prioridad) > numcolor(aux2.prioridad):
         return aux2
     return aux1
 
@@ -53,7 +65,7 @@ def main() -> None:
             paciente.set_prioridad(enfermero.triage(paciente))
             Cola.append(paciente)
             aux = triageDyV(Cola)
-            Cola.remove(aux)
+
 
             rebote = medico1.atender(aux)
             if Medico.cantidad > 1 and rebote:
@@ -64,7 +76,8 @@ def main() -> None:
                     rebote = medico4.atender(aux)
             if Medico.cantidad > 4 and rebote:
                 rebote = medico5.atender(aux)
-
+            if not(rebote):
+                Cola.remove(aux)
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
 
 
