@@ -4,27 +4,27 @@ import random
 
 
 class Esintomas(Enum):
-    #rojo
+    # rojo
     Politraumatismo_grave = 0
-    #naranja
+    # naranja
     Coma = 1
     Convulsion = 2
     hemorragia_digestiva = 3
     Isquemia = 4
-    #amarillo
+    # amarillo
     Cefalea_brusca = 5
     Paresia = 6
     Hipertension_arterial = 7
     Vertigo_con_afectacion_vegetativa = 8
     Sincope = 9
     Urgencia_psiquiatrica = 10
-    #verde
+    # verde
     Otalgia = 11
     Odontalgia = 12
     Dolor_inespecifico_leve = 13
     Traumatismo = 14
     Esguince = 15
-    #azul
+    # azul
     otro = 16
 
 
@@ -48,6 +48,7 @@ class Paciente:
     def paso_tiempo(self):
         if self.tiempo_espera == 0:
             return
+        # no puede haber tiempo negativo o prioridad mayor a rojo, no tiene sentido bajarle el tiempo
         self.tiempo_espera -= 5
         if self.tiempo_espera == 0:
             self.set_prioridad(Color.ROJO)
@@ -57,6 +58,7 @@ class Paciente:
             self.set_prioridad(Color.AMARILLO)
         elif self.tiempo_espera == 120:
             self.set_prioridad(Color.VERDE)
+        # En caso de que el tiempo de epsera supere al de su prioridad, se le cambia la misma
 
     def set_prioridad(self, prioridad: Color):
         self.prioridad = prioridad
@@ -72,6 +74,7 @@ class Paciente:
 
 class Medico:
     cantidad = 1
+    # arranca en 1 porque la hora inicial es 00:00
 
     def __init__(self, nombre: str, apellido: str):
         self.nombre = nombre
@@ -80,7 +83,7 @@ class Medico:
         self.tiempo_atencion = 0
 
     def set_ocupado(self):
-        self.ocupado = not(self.ocupado)
+        self.ocupado = not self.ocupado
 
     def atender(self, paciente: Paciente) -> bool:
         if self.ocupado:
@@ -94,6 +97,7 @@ class Medico:
             self.tiempo_atencion -= 5
             if self.tiempo_atencion == 0:
                 self.set_ocupado()
+        # solo funciona si el medico esta atendiendo
 
     def set_tiempo(self, urgencia: Color):
         tiempo = 0
@@ -112,12 +116,15 @@ class Medico:
         else:
             aux = random.randint(5, 15)
             tiempo = aux - (aux % 5)
+        # dependiendo del color, se le asigna un tiempo a el tratamiento segun la gravedad del mismo
+        # Ademas, para que los tiempos sean multiplos de 5, le sacamos el resto a cada numero random
         self.tiempo_atencion = tiempo
 
 
 class Enfermero:
 
     def triage(self, paciente: Paciente) -> Color:
+        # dependiendo del sintoma del paciente se le asigna una prioridad
         aux = Esintomas(paciente.sintomas)
         if paciente.sintomas == Esintomas.Politraumatismo_grave:
             return Color.ROJO
@@ -138,6 +145,7 @@ class Tiempo:
     horas = 0
 
     def avanzar(self, cola: list[Paciente], medico1, medico2, medico3, medico4, medico5):
+        # actualizo el tiempo
         Tiempo.minutos += 5
         if Tiempo.minutos == 60:
             Tiempo.minutos = 0

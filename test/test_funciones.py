@@ -51,6 +51,7 @@ def test_doblerojo():
     aux = triageDyV(cola)
     assert aux == pacienterojo
 
+
 def testiempoespera():
 
     enfermero = Enfermero()

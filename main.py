@@ -8,12 +8,16 @@ from src.clases import Color
 
 
 def triageDyV(vector: list[Paciente]):
+    # Funcion DyV que se encarga de retonar el paciente con mayor prioridad
     if len(vector) > 0:
         return mayor(vector, 1, len(vector))
     else:
         raise ValueError
+    # en caso de que se pase una lista sin largo
 
-def numcolor(color:Color):
+
+def numcolor(color: Color):
+    # Funcion que devuelve el enum convertido en int para evitar muchas condiciones innecesarias
     if color == color.ROJO:
         return 0
     elif color == color.NARANJA:
@@ -24,29 +28,40 @@ def numcolor(color:Color):
         return 3
     else:
         return 4
+
+
 def mayor(vector: list[Paciente], inicio: int, fin: int) -> Paciente:
     if fin - inicio == 0:
         return vector[inicio - 1]
+    # Caso base que retorna al unico de la lista
     elif (fin-inicio) == 1:
         if numcolor(vector[inicio - 1].prioridad) < numcolor(vector[fin - 1].prioridad):
             return vector[inicio - 1]
         elif numcolor(vector[inicio - 1].prioridad) > numcolor(vector[fin - 1].prioridad):
             return vector[fin - 1]
         return vector[inicio - 1]
+    # Caso base que devuelve el de mayor prioridad de una lista de 2, en caso de que tengan la misma, devuelvo al que
+    # ingreso primero
 
     mitad: int = int(((fin - inicio) / 2) + inicio)
     aux1: Paciente = mayor(vector, inicio, mitad)
     aux2: Paciente = mayor(vector, mitad + 1, fin)
+    # Caso recursivo
 
     if numcolor(aux1.prioridad) < numcolor(aux2.prioridad):
         return aux1
     elif numcolor(aux1.prioridad) > numcolor(aux2.prioridad):
         return aux2
     return aux1
+# terminamos de comparar las prioridades de los dos mejores pacientes como en el caso base
 
-def atencion(Cola:list[Paciente], medico1: Medico, medico2: Medico, medico3:Medico, medico4: Medico, medico5: Medico) -> list[Paciente]:
+
+def atencion(Cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Medico, medico4: Medico, medico5: Medico)\
+        -> list[Paciente]:
     aux = triageDyV(Cola)
+    # recibo el paciente con mayor prioridad
 
+    # rebote: una variable booleana que sirve para ver si el paciente fue atendido o no
     rebote = medico1.atender(aux)
     if Medico.cantidad > 1 and rebote:
         rebote = medico2.atender(aux)
@@ -56,10 +71,14 @@ def atencion(Cola:list[Paciente], medico1: Medico, medico2: Medico, medico3:Medi
             rebote = medico4.atender(aux)
     if Medico.cantidad > 4 and rebote:
         rebote = medico5.atender(aux)
-    if not (rebote):
+    # las condiciones se basan en la cantidad de medicos disponibles y si fue atendido el paciente
+    if not rebote:
         Cola.remove(aux)
+    # solo en caso de que fue atendido el paciente, se lo borra de la lista
 
     return Cola
+
+
 def main() -> None:
     tiempo = Tiempo()
     Cola = []
@@ -70,28 +89,35 @@ def main() -> None:
     medico4 = Medico("Myrddin", "Wyllt")
     medico5 = Medico("Elessar", "Telcontar")
     line = []
-    j = 0
+    # inicializo los objetos que van a utilizarse
+
+    # abrimos el archivo y lo leemos linea por linea
     with open("src/pacientes.csv") as file:
         reader = csv.reader(file, delimiter=',')
         next(file, None)
 
-
-
         for line in reader:
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
+            # a partir de del triage del enfermero sobre el paciente, al ultimo se le asigna su prioridad
+
             Cola.append(paciente)
+            # lo agrego a la cola
 
             Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
 
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
-
-
+            # avanzo el tiempo cada 5 minutos y actualizo los tiempos de cada objeto
 
     while len(Cola) or medico5.ocupado or medico4.ocupado or medico2.ocupado or medico3.ocupado or medico1.ocupado:
+        # sirve para seguir atendiendo a los pacientes incluso despues de leer todos los pacientes del archivo
         if len(Cola) != 0:
+            # solo en caso de que siga habiendo pacientes en espera
             Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
+
         tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
+        # el avance del tiempo es inevitable, en caso de que ya no haya cola de espera, falta que los medicos terminen
+        # de atender
 
 
 if __name__ == "__main__":
