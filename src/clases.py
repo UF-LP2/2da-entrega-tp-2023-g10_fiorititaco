@@ -154,7 +154,7 @@ class Tiempo:
             Medico.cantidad = 3
 
         i = 0
-        while len(cola):
+        while i != len(cola):
             cola[i].paso_tiempo()
             i += 1
 

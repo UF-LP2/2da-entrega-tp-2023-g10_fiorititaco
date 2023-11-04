@@ -44,7 +44,22 @@ def mayor(vector: list[Paciente], inicio: int, fin: int) -> Paciente:
         return aux2
     return aux1
 
+def atencion(Cola:list[Paciente], medico1: Medico, medico2: Medico, medico3:Medico, medico4: Medico, medico5: Medico) -> list[Paciente]:
+    aux = triageDyV(Cola)
 
+    rebote = medico1.atender(aux)
+    if Medico.cantidad > 1 and rebote:
+        rebote = medico2.atender(aux)
+    if Medico.cantidad > 2 and rebote:
+        rebote = medico3.atender(aux)
+        if rebote:
+            rebote = medico4.atender(aux)
+    if Medico.cantidad > 4 and rebote:
+        rebote = medico5.atender(aux)
+    if not (rebote):
+        Cola.remove(aux)
+
+    return Cola
 def main() -> None:
     tiempo = Tiempo()
     Cola = []
@@ -54,31 +69,29 @@ def main() -> None:
     medico3 = Medico("Qui-Gon", "Jinn")
     medico4 = Medico("Myrddin", "Wyllt")
     medico5 = Medico("Elessar", "Telcontar")
-
+    line = []
+    j = 0
     with open("src/pacientes.csv") as file:
         reader = csv.reader(file, delimiter=',')
         next(file, None)
 
-        for line in reader:
 
+
+        for line in reader:
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
             Cola.append(paciente)
-            aux = triageDyV(Cola)
 
+            Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
 
-            rebote = medico1.atender(aux)
-            if Medico.cantidad > 1 and rebote:
-                rebote = medico2.atender(aux)
-            if Medico.cantidad > 2 and rebote:
-                rebote = medico3.atender(aux)
-                if rebote:
-                    rebote = medico4.atender(aux)
-            if Medico.cantidad > 4 and rebote:
-                rebote = medico5.atender(aux)
-            if not(rebote):
-                Cola.remove(aux)
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
+
+
+
+    while len(Cola) or medico5.ocupado or medico4.ocupado or medico2.ocupado or medico3.ocupado or medico1.ocupado:
+        if len(Cola) != 0:
+            Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
+        tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
 
 
 if __name__ == "__main__":
