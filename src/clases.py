@@ -102,20 +102,26 @@ class Medico:
     def set_tiempo(self, urgencia: Color):
         tiempo = 0
         if urgencia == Color.ROJO:
-            aux = random.randint(30, 60)
-            tiempo = aux - (aux % 5)
+            # aux = random.randint(30, 45)
+           # tiempo = aux - (aux % 5)
+            tiempo = 25
         elif urgencia == Color.NARANJA:
-            aux = random.randint(30, 50)
-            tiempo = aux - (aux % 5)
+            # aux = random.randint(20, 30)
+            # tiempo = aux - (aux % 5)
+            tiempo = 20
         elif urgencia == Color.AMARILLO:
-            aux = random.randint(20, 30)
-            tiempo = aux - (aux % 5)
+           # aux = random.randint(15, 20)
+            # tiempo = aux - (aux % 5)
+            tiempo = 15
         elif urgencia == Color.VERDE:
-            aux = random.randint(15, 20)
-            tiempo = aux - (aux % 5)
+            # aux = random.randint(10, 15)
+            # tiempo = aux - (aux % 5)
+            tiempo = 10
         else:
-            aux = random.randint(5, 15)
-            tiempo = aux - (aux % 5)
+            # aux = random.randint(5, 1)
+            # tiempo = aux - (aux % 5)
+
+            tiempo = 5
         # dependiendo del color, se le asigna un tiempo a el tratamiento segun la gravedad del mismo
         # Ademas, para que los tiempos sean multiplos de 5, le sacamos el resto a cada numero random
         self.tiempo_atencion = tiempo

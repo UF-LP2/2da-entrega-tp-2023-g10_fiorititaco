@@ -58,7 +58,11 @@ def mayor(vector: list[Paciente], inicio: int, fin: int) -> Paciente:
 
 def atencion(Cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Medico, medico4: Medico, medico5: Medico)\
         -> list[Paciente]:
-    aux = triageDyV(Cola)
+    try:
+        aux = triageDyV(Cola)
+    except ValueError:
+        return Cola
+
     # recibo el paciente con mayor prioridad
 
     # rebote: una variable booleana que sirve para ver si el paciente fue atendido o no
@@ -108,6 +112,14 @@ def main() -> None:
 
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
             # avanzo el tiempo cada 5 minutos y actualizo los tiempos de cada objeto
+            i = 0
+            print("Paciente en la cola de espera a las ", tiempo.horas, ":", tiempo.minutos), " :"
+            if len(Cola) != 0:
+                while i < len(Cola):
+                    print("Paciente ", i, ": ", Cola[i].nombre, "\t", Cola[i].apellido, "\t", Cola[i].dni, "\t", Cola[i].prioridad)
+                    i += 1
+            else:
+                print("No hay pacientes en espera.")
 
     while len(Cola) or medico5.ocupado or medico4.ocupado or medico2.ocupado or medico3.ocupado or medico1.ocupado:
         # sirve para seguir atendiendo a los pacientes incluso despues de leer todos los pacientes del archivo
@@ -121,4 +133,22 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    app = tk.Tk()
+    app.geometry("2000x700")
+    app.title("Triage DyV")
+    app.configure(background="pink")
+    titulo = tk.Label(app, text="Manejo de pacientes segun urgencia (Triage)", bg="pink", font=("Times New Roman", 30))
+    titulo.pack()
+    boton1 = tk.Button(app,
+    text="Ejecutar simulacion",
+    font=("Times new roman", 15),
+    bg="#fcc861",
+    fg="black",
+    width =15,
+    height =1,
+    command=lambda: main())
+    boton1.pack()
+
+    app.mainloop()
+
+
