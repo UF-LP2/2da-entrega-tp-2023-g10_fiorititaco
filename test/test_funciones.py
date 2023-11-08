@@ -1,5 +1,5 @@
 import pytest
-from main import *
+from main import triageDyV
 from src.clases import Enfermero
 from src.clases import Medico
 from src.clases import Tiempo
