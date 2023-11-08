@@ -95,7 +95,7 @@ class Medico:
     def paso_tiempo(self):
         if self.ocupado:
             self.tiempo_atencion -= 5
-            if self.tiempo_atencion == 0:
+        if self.tiempo_atencion <= 0:
                 self.set_ocupado()
         # solo funciona si el medico esta atendiendo
 
@@ -104,7 +104,7 @@ class Medico:
         if urgencia == Color.ROJO:
             # aux = random.randint(30, 45)
            # tiempo = aux - (aux % 5)
-            tiempo = 25
+            tiempo = 0
         elif urgencia == Color.NARANJA:
             # aux = random.randint(20, 30)
             # tiempo = aux - (aux % 5)

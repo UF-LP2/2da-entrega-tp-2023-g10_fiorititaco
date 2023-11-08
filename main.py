@@ -1,5 +1,5 @@
 import csv
-# import tkinter as tk
+import tkinter as tk
 from src.clases import Tiempo
 from src.clases import Enfermero
 from src.clases import Medico
@@ -134,33 +134,23 @@ def main() -> None:
 
 if __name__ == "__main__":
     pass
-    #app = tk.Tk()
-    #app.geometry("2000x700")
-    #app.title("Triage DyV")
-    #app.configure(background="pink")
-    #titulo = tk.Label(app, text="Manejo de pacientes segun urgencia (Triage)", bg="pink", font=("Times New Roman", 30))
-    #titulo.pack()
-    # boton1 = tk.Button(app,
-    # text="Ejecutar simulacion",
-    # font=("Times new roman", 15),
-    # bg="#fcc861",
-    # fg="black",
-    # width =15,
-    # height =1,
-    # command=lambda: main())
-    # boton1.pack()
-    #
-    # app.mainloop()
-# boton1 = tk.Button(app,
-# text="Ejecutar simulacion",
-# font=("Times new roman", 15),
-# bg="#fcc861",
-# fg="black",
-# width =15,
-# height =1,
-# command=lambda: main())
-# boton1.pack()
-#
-# app.mainloop()
+    app = tk.Tk()
+    app.geometry("2000x700")
+    app.title("Triage DyV")
+    app.configure(background="pink")
+    titulo = tk.Label(app, text="Manejo de pacientes segun urgencia (Triage)", bg="pink", font=("Times New Roman", 30))
+    titulo.pack()
+    boton1 = tk.Button(app,
+    text="Ejecutar simulacion",
+    font=("Times new roman", 15),
+    bg="#fcc861",
+    fg="black",
+    width =15,
+    height =1,
+    command=lambda: main())
+    boton1.pack()
+
+    app.mainloop()
+
 
 
