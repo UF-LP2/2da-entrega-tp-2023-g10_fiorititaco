@@ -96,21 +96,21 @@ class Medico:
         if self.ocupado:
             self.tiempo_atencion -= 5
         if self.tiempo_atencion <= 0:
-                self.set_ocupado()
+            self.set_ocupado()
         # solo funciona si el medico esta atendiendo
 
     def set_tiempo(self, urgencia: Color):
         tiempo = 0
         if urgencia == Color.ROJO:
             # aux = random.randint(30, 45)
-           # tiempo = aux - (aux % 5)
+            # tiempo = aux - (aux % 5)
             tiempo = 0
         elif urgencia == Color.NARANJA:
             # aux = random.randint(20, 30)
             # tiempo = aux - (aux % 5)
             tiempo = 20
         elif urgencia == Color.AMARILLO:
-           # aux = random.randint(15, 20)
+            # aux = random.randint(15, 20)
             # tiempo = aux - (aux % 5)
             tiempo = 15
         elif urgencia == Color.VERDE:
@@ -168,7 +168,7 @@ class Tiempo:
             Medico.cantidad = 3
 
         i = 0
-        while i != len(cola):
+        while i < len(cola):
             cola[i].paso_tiempo()
             i += 1
 

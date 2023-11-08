@@ -99,7 +99,7 @@ def main() -> None:
     with open("src/pacientes.csv") as file:
         reader = csv.reader(file, delimiter=',')
         next(file, None)
-
+        print("")
         for line in reader:
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
@@ -116,7 +116,7 @@ def main() -> None:
             print("Paciente en la cola de espera a las ", tiempo.horas, ":", tiempo.minutos), " :"
             if len(Cola) != 0:
                 while i < len(Cola):
-                    print("Paciente ", i, ": ", Cola[i].nombre, "\t", Cola[i].apellido, "\t", Cola[i].dni, "\t", Cola[i].prioridad)
+                    print(i, Cola[i].nombre, "\t", Cola[i].apellido, "\t", Cola[i].dni, "\t", Cola[i].prioridad)
                     i += 1
             else:
                 print("No hay pacientes en espera.")
