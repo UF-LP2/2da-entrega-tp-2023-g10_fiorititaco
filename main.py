@@ -1,6 +1,14 @@
 import csv
 import PySimpleGUI as sg
 from src.clases import *
+import pygame
+
+
+def play_music(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+
 
 def triageDyV(vector: list[Paciente]):
     # Funcion DyV que se encarga de retonar el paciente con mayor prioridad
@@ -77,6 +85,7 @@ def atencion(Cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Me
 
     return Cola
 
+
 def imprimir(cola, tiempo):
     output_text = f"Pacientes en la cola de espera a las {tiempo.horas:02}:{tiempo.minutos:02}:\n"
 
@@ -87,6 +96,7 @@ def imprimir(cola, tiempo):
         output_text += "No hay pacientes en espera."
 
     return output_text
+
 
 def main():
     tiempo = Tiempo()
@@ -126,5 +136,9 @@ def main():
     window.close()
     file.close()
 
+
 if __name__ == "__main__":
+    song_path = "path_to_your_song.mp3"
+    play_music("C:/Users/ffior/Downloads/UDL Downloads/FNAF - #Five Nights at Freddy's 1 #Song By @The Living Tombstone"
+               " # Animated by KoFFTLY & DivianSFM [mp3].mp3")
     main()

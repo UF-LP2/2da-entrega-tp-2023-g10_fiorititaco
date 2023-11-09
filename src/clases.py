@@ -179,5 +179,5 @@ class Tiempo:
 class Texto:
     def mostrar(self, app):
         file = open("src/final.txt", 'r')
-        label = tkinter.Label(app, text=file.read(),font=("Times new roman", 10), bg="white", fg="black")
+        label = tkinter.Label(app, text=file.read(), font=("Times new roman", 10), bg="white", fg="black")
         label.pack()
