@@ -1,8 +1,6 @@
 import pytest
 from main import triageDyV
 from src.clases import Enfermero
-from src.clases import Medico
-from src.clases import Tiempo
 from src.clases import Paciente
 from src.clases import Color
 

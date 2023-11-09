@@ -1,6 +1,5 @@
 
 from enum import Enum
-import random
 
 
 class Esintomas(Enum):
@@ -100,7 +99,6 @@ class Medico:
         # solo funciona si el medico esta atendiendo
 
     def set_tiempo(self, urgencia: Color):
-        tiempo = 0
         if urgencia == Color.ROJO:
             # aux = random.randint(30, 45)
             # tiempo = aux - (aux % 5)
@@ -120,7 +118,6 @@ class Medico:
         else:
             # aux = random.randint(5, 1)
             # tiempo = aux - (aux % 5)
-
             tiempo = 5
         # dependiendo del color, se le asigna un tiempo a el tratamiento segun la gravedad del mismo
         # Ademas, para que los tiempos sean multiplos de 5, le sacamos el resto a cada numero random
@@ -131,7 +128,6 @@ class Enfermero:
 
     def triage(self, paciente: Paciente) -> Color:
         # dependiendo del sintoma del paciente se le asigna una prioridad
-        aux = Esintomas(paciente.sintomas)
         if paciente.sintomas == Esintomas.Politraumatismo_grave:
             return Color.ROJO
         elif (paciente.sintomas == Esintomas.Coma or paciente.sintomas == Esintomas.Convulsion or
