@@ -5,6 +5,7 @@ from src.clases import Enfermero
 from src.clases import Medico
 from src.clases import Paciente
 from src.clases import Color
+from src.clases import Texto
 
 
 def triageDyV(vector: list[Paciente]):
@@ -83,15 +84,15 @@ def atencion(Cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Me
     return Cola
 
 
-def imprimir(cola):
+def imprimir(cola, file):
     i = 0
-    print("Paciente en la cola de espera a las ", str(Tiempo.horas), ":", str(Tiempo.minutos), " :")
+    file.write("Paciente en la cola de espera a las ", str(Tiempo.horas), ":", str(Tiempo.minutos), " : \n")
     if len(cola) != 0:
         while i < len(cola):
-            print(i, cola[i].nombre, "\t", cola[i].apellido, "\t", cola[i].dni, "\t", cola[i].prioridad)
+            file.write(i, cola[i].nombre, "\t", cola[i].apellido, "\t", cola[i].dni, "\t", cola[i].prioridad, "\n")
             i += 1
     else:
-        print("No hay pacientes en espera.")
+        file.write("No hay pacientes en espera.\n")
 
 
 def main() -> None:
@@ -107,9 +108,10 @@ def main() -> None:
 
     # abrimos el archivo y lo leemos linea por linea
     with open("src/pacientes.csv") as file:
+        file = open("final.txt", 'w')
         reader = csv.reader(file, delimiter=',')
         next(file, None)
-        print("Paciente \t Nombre \t Apellido \t DNI \t Prioridad \n")
+        file.write("Paciente \t Nombre \t Apellido \t DNI \t Prioridad \n")
         for line in reader:
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
@@ -121,7 +123,7 @@ def main() -> None:
 
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
             # avanzo el tiempo cada 5 minutos y actualizo los tiempos de cada objeto
-            imprimir(Cola)
+            imprimir(Cola, file)
 
     while len(Cola) or medico5.ocupado or medico4.ocupado or medico2.ocupado or medico3.ocupado or medico1.ocupado:
         # sirve para seguir atendiendo a los pacientes incluso despues de leer todos los pacientes del archivo
@@ -130,13 +132,15 @@ def main() -> None:
             Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
 
         tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
-        imprimir(Cola)
+        imprimir(Cola, file)
         # el avance del tiempo es inevitable, en caso de que ya no haya cola de espera, falta que los medicos terminen
         # de atender
 
 
 if __name__ == "__main__":
     pass
+
+    texto = Texto()
     app = tk.Tk()
     app.geometry("2000x700")
     app.title("Triage DyV")
@@ -146,5 +150,9 @@ if __name__ == "__main__":
     boton1 = tk.Button(app, text="Ejecutar simulacion", font=("Times new roman", 15), bg="#fcc861", fg="black",
                        width=15, height=1, command=lambda: main())
     boton1.pack()
-
+    boton2 = tk.Button(app, text="Lista",font=("Times new roman", 15), bg="#fcc861", fg="black",
+                       width=15, height=1, command=lambda: etiqueta)
+    boton2.pack()
+    etiqueta = tk.Label(app, text=texto.mostrar(),bg="white",font=("Times new roman", 10), fg="black")
+    etiqueta.pack()
     app.mainloop()

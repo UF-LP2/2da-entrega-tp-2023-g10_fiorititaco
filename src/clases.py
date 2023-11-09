@@ -174,3 +174,9 @@ class Tiempo:
         medico3.paso_tiempo()
         medico4.paso_tiempo()
         medico5.paso_tiempo()
+
+class Texto:
+    def mostrar(self):
+        file = open("final.txt", 'w')
+        text = file.read()
+        print(text)
