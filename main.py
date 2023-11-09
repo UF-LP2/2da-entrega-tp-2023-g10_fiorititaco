@@ -6,7 +6,6 @@ from src.clases import Medico
 from src.clases import Paciente
 from src.clases import Color
 
-
 def triageDyV(vector: list[Paciente]):
     # Funcion DyV que se encarga de retonar el paciente con mayor prioridad
     if len(vector) > 0:
@@ -99,7 +98,7 @@ def main() -> None:
     with open("src/pacientes.csv") as file:
         reader = csv.reader(file, delimiter=',')
         next(file, None)
-        print("")
+        print("Paciente \t Nombre \t Apellido \t DNI \t Prioridad \n")
         for line in reader:
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
@@ -113,7 +112,7 @@ def main() -> None:
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
             # avanzo el tiempo cada 5 minutos y actualizo los tiempos de cada objeto
             i = 0
-            print("Paciente en la cola de espera a las ", tiempo.horas, ":", tiempo.minutos), " :"
+            print("Paciente en la cola de espera a las ", str(tiempo.horas), ":", str(tiempo.minutos), " :")
             if len(Cola) != 0:
                 while i < len(Cola):
                     print(i, Cola[i].nombre, "\t", Cola[i].apellido, "\t", Cola[i].dni, "\t", Cola[i].prioridad)
