@@ -1,4 +1,4 @@
-
+import tkinter
 from enum import Enum
 
 
@@ -175,8 +175,9 @@ class Tiempo:
         medico4.paso_tiempo()
         medico5.paso_tiempo()
 
+
 class Texto:
-    def mostrar(self):
-        file = open("final.txt", 'w')
-        text = file.read()
-        print(text)
+    def mostrar(self, app):
+        file = open("src/final.txt", 'r')
+        label = tkinter.Label(app, text=file.read(),font=("Times new roman", 10), bg="white", fg="black")
+        label.pack()

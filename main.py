@@ -1,12 +1,6 @@
 import csv
-import tkinter as tk
-from src.clases import Tiempo
-from src.clases import Enfermero
-from src.clases import Medico
-from src.clases import Paciente
-from src.clases import Color
-from src.clases import Texto
-
+import PySimpleGUI as sg
+from src.clases import *
 
 def triageDyV(vector: list[Paciente]):
     # Funcion DyV que se encarga de retonar el paciente con mayor prioridad
@@ -83,76 +77,54 @@ def atencion(Cola: list[Paciente], medico1: Medico, medico2: Medico, medico3: Me
 
     return Cola
 
+def imprimir(cola, tiempo):
+    output_text = f"Pacientes en la cola de espera a las {tiempo.horas:02}:{tiempo.minutos:02}:\n"
 
-def imprimir(cola, file):
-    i = 0
-    file.write("Paciente en la cola de espera a las ", str(Tiempo.horas), ":", str(Tiempo.minutos), " : \n")
     if len(cola) != 0:
-        while i < len(cola):
-            file.write(i, cola[i].nombre, "\t", cola[i].apellido, "\t", cola[i].dni, "\t", cola[i].prioridad, "\n")
-            i += 1
+        for i, paciente in enumerate(cola, start=1):
+            output_text += f"{i}\t\t{paciente.nombre}\t\t{paciente.apellido}\t\t{paciente.dni}\t\t{paciente.prioridad.name}\n"
     else:
-        file.write("No hay pacientes en espera.\n")
+        output_text += "No hay pacientes en espera."
 
+    return output_text
 
-def main() -> None:
+def main():
     tiempo = Tiempo()
     Cola = []
     enfermero = Enfermero()
     medico1 = Medico("Gandalf", "El Blanco")
-    medico2 = Medico("Albus", "Dumbledor")
+    medico2 = Medico("Albus", "Dumbledore")
     medico3 = Medico("Qui-Gon", "Jinn")
     medico4 = Medico("Myrddin", "Wyllt")
     medico5 = Medico("Elessar", "Telcontar")
-    # inicializo los objetos que van a utilizarse
 
-    # abrimos el archivo y lo leemos linea por linea
-    with open("src/pacientes.csv") as file:
-        file = open("final.txt", 'w')
-        reader = csv.reader(file, delimiter=',')
-        next(file, None)
-        file.write("Paciente \t Nombre \t Apellido \t DNI \t Prioridad \n")
-        for line in reader:
+    layout = [
+        [sg.Text("Manejo de pacientes según urgencia (Triage)", font=("Times New Roman", 20))],
+        [sg.Button("Avanzar simulacion", key="-RUN-")],
+        [sg.Multiline("", size=(80, 20), key="-OUTPUT-", autoscroll=True)]
+    ]
+
+    window = sg.Window("Triage DyV", layout, resizable=True, finalize=True)
+    file = open("src/pacientes.csv")
+    reader = csv.reader(file, delimiter=',')
+    next(file, None)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WINDOW_CLOSED:
+            break
+        elif event == "-RUN-":
+            line = next(reader, None)
             paciente = Paciente(line[1], line[2], line[3], int(line[0]))
             paciente.set_prioridad(enfermero.triage(paciente))
-            # a partir de del triage del enfermero sobre el paciente, al ultimo se le asigna su prioridad
-
             Cola.append(paciente)
-            # lo agrego a la cola
             Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
-
             tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
-            # avanzo el tiempo cada 5 minutos y actualizo los tiempos de cada objeto
-            imprimir(Cola, file)
+            window["-OUTPUT-"].update(imprimir(Cola, tiempo))
 
-    while len(Cola) or medico5.ocupado or medico4.ocupado or medico2.ocupado or medico3.ocupado or medico1.ocupado:
-        # sirve para seguir atendiendo a los pacientes incluso despues de leer todos los pacientes del archivo
-        if len(Cola) != 0:
-            # solo en caso de que siga habiendo pacientes en espera
-            Cola = atencion(Cola, medico1, medico2, medico3, medico4, medico5)
-
-        tiempo.avanzar(Cola, medico1, medico2, medico3, medico4, medico5)
-        imprimir(Cola, file)
-        # el avance del tiempo es inevitable, en caso de que ya no haya cola de espera, falta que los medicos terminen
-        # de atender
-
+    window.close()
+    file.close()
 
 if __name__ == "__main__":
-    pass
-
-    texto = Texto()
-    app = tk.Tk()
-    app.geometry("2000x700")
-    app.title("Triage DyV")
-    app.configure(background="pink")
-    titulo = tk.Label(app, text="Manejo de pacientes segun urgencia (Triage)", bg="pink", font=("Times New Roman", 30))
-    titulo.pack()
-    boton1 = tk.Button(app, text="Ejecutar simulacion", font=("Times new roman", 15), bg="#fcc861", fg="black",
-                       width=15, height=1, command=lambda: main())
-    boton1.pack()
-    boton2 = tk.Button(app, text="Lista",font=("Times new roman", 15), bg="#fcc861", fg="black",
-                       width=15, height=1, command=lambda: etiqueta)
-    boton2.pack()
-    etiqueta = tk.Label(app, text=texto.mostrar(),bg="white",font=("Times new roman", 10), fg="black")
-    etiqueta.pack()
-    app.mainloop()
+    main()
