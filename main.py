@@ -139,6 +139,6 @@ def main():
 
 if __name__ == "__main__":
     song_path = "path_to_your_song.mp3"
-    play_music("C:/Users/ffior/Downloads/UDL Downloads/FNAF - #Five Nights at Freddy's 1 #Song By @The Living Tombstone"
-               " # Animated by KoFFTLY & DivianSFM [mp3].mp3")
+    play_music("src/FNAF - #Five Nights at Freddy's 1 #Song By @The Living Tombstone # Animated by KoFFTLY & DivianSFM"
+               " [mp3].mp3")
     main()
